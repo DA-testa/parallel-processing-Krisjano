@@ -1,32 +1,23 @@
-# python3
-
-
-
 import heapq
 
-
-
-n, m = map(int, input().split())
-times = list(map(int, input().split()))
-
-thread_times = [(0, i) for i in range(n)]
-thread_job_assignments = [[] for _ in range(n)]
-
-for i in range(m):
+def parallel_processing(n, m, data):
     
-    job_time = times[i]
-    
-    start_time, thread_id = heapq.heappop(thread_times)
-    
-    thread_job_assignments[thread_id].append(i)
-    
-    finish_time = start_time + job_time
-    
-    heapq.heappush(thread_times, (finish_time, thread_id))
+    output = []
+    pavedieni = [(0, i) for i in range(n)]
+    heapq.heapify(pavedieni)
     
     
-for i in range(n):
-    print(i, end=' ')
-    for j in thread_job_assignments[i]:
-        print(j, end=' ')
-    print()
+    for i in range(m):
+        time = data[i]
+        f_time, pavediens = heapq.heappop(pavedieni)
+        if output:
+            s_time = max(f_time, output[-1][1])
+        else:
+            s_time = f_time
+            
+        f_time = s_time + time
+        
+        output.append((pavediens, s_time))
+        heapq.heappush(pavedieni, (f_time, pavediens))
+        
+    return output
